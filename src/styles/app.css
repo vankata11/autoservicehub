@@ -1,7 +1,37 @@
 /* Tiny custom styling on top of Bootstrap */
 body { background: #f8f9fa; }
-.navbar-brand { font-weight: 700; letter-spacing: .2px; }
-.card { border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.06); border-radius: 16px; }
-.btn, .form-control, .form-select { border-radius: 12px; }
-.badge { border-radius: 999px; }
-.container-narrow { max-width: 980px; }
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.card {
+  border: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  border-radius: 16px;
+}
+
+.btn,
+.form-control,
+.form-select {
+  border-radius: 12px;
+}
+
+.badge {
+  border-radius: 999px;
+}
+
+.container-narrow {
+  max-width: 980px;
+}
+
+/* Button hover polish */
+.btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
