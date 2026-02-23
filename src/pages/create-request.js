@@ -1,9 +1,8 @@
 import '../styles/app.css';
 import { renderNavbar } from '../components/navbar.js';
 import { requireAuthOrRedirect } from '../services/authService.js';
-import { createRequest } from '../services/requestService.js';
+import { createRequest, addRequestFile } from '../services/requestService.js';
 import { uploadRequestFile } from '../services/storageService.js';
-import { addRequestFile } from '../services/requestService.js';
 import { toast } from '../lib/ui.js';
 
 async function main() {
@@ -21,6 +20,22 @@ async function main() {
     const car = document.querySelector('#car').value.trim();
     const description = document.querySelector('#description').value.trim();
     const fileInput = document.querySelector('#files');
+
+    // Basic client-side validation
+    if (!title || title.length < 5) {
+      toast('Заглавието трябва да е поне 5 символа.', 'warning');
+      return;
+    }
+
+    if (!car) {
+      toast('Моля въведете модел на автомобила.', 'warning');
+      return;
+    }
+
+    if (!description || description.length < 10) {
+      toast('Описанието трябва да е поне 10 символа.', 'warning');
+      return;
+    }
 
     try {
       const req = await createRequest({
