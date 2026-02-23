@@ -89,3 +89,16 @@ Log out / log in again. You should see **Admin** in the navbar.
 - RLS is enabled on all tables.
 - Storage bucket policies enforce per-user folder access.
 - Admin privileges are derived from DB role mapping (`public.is_admin()`).
+
+## Architecture Overview
+
+Project structure:
+- `src/pages/` – page scripts (one per HTML page)
+- `src/services/` – business logic (Supabase calls)
+- `src/components/` – UI components (navbar)
+- `src/lib/` – guards + UI helpers
+
+Security:
+- Row Level Security (RLS) enabled for all public tables
+- Role-based access via `roles` + `user_roles` and `public.is_admin()`
+- File access via signed URLs (private bucket)
