@@ -50,6 +50,7 @@ async function main() {
     document.querySelectorAll('tr[data-id]').forEach(tr => {
       const id = tr.getAttribute('data-id');
 
+      // Status change
       tr.querySelector('select.status')?.addEventListener('change', async (e) => {
         const status = e.target.value;
         try {
@@ -60,14 +61,24 @@ async function main() {
         }
       });
 
-      tr.querySelector('button.del')?.addEventListener('click', async () => {
+      // Delete with loading state
+      tr.querySelector('button.del')?.addEventListener('click', async (e) => {
         if (!confirm('Сигурен ли си, че искаш да изтриеш заявката?')) return;
+
+        const btn = e.currentTarget;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Изтриване...';
+
         try {
           await adminDeleteRequest(id);
           toast('Изтрита заявка', 'success');
           await load();
         } catch (err) {
           toast(err?.message ?? 'Грешка при изтриване', 'danger');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
         }
       });
     });
