@@ -102,3 +102,15 @@ Security:
 - Row Level Security (RLS) enabled for all public tables
 - Role-based access via `roles` + `user_roles` and `public.is_admin()`
 - File access via signed URLs (private bucket)
+
+## Live Demo
+
+Production site:
+https://dashing-cannoli-44cb1a.netlify.app
+
+### Netlify Environment Variables
+
+Make sure the following variables are configured in Netlify:
+
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
