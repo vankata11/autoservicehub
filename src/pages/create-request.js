@@ -16,6 +16,15 @@ async function main() {
   document.querySelector('#formCreate').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // UX: disable submit button to prevent double submits
+    const submitBtn = document.querySelector('#formCreate button[type="submit"]');
+    const originalBtnText = submitBtn?.textContent ?? 'Създай';
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Създаване...';
+    }
+
     const title = document.querySelector('#title').value.trim();
     const car = document.querySelector('#car').value.trim();
     const description = document.querySelector('#description').value.trim();
@@ -24,16 +33,19 @@ async function main() {
     // Basic client-side validation
     if (!title || title.length < 5) {
       toast('Заглавието трябва да е поне 5 символа.', 'warning');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
       return;
     }
 
     if (!car) {
       toast('Моля въведете модел на автомобила.', 'warning');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
       return;
     }
 
     if (!description || description.length < 10) {
       toast('Описанието трябва да е поне 10 символа.', 'warning');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
       return;
     }
 
@@ -61,6 +73,11 @@ async function main() {
       window.location.href = `/request.html?id=${req.id}`;
     } catch (err) {
       toast(err?.message ?? 'Грешка при създаване', 'danger');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
     }
   });
 }
