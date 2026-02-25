@@ -10,9 +10,12 @@
   <body>
     <main class="py-5">
       <div class="container container-narrow">
+
         <div class="mb-3">
           <h1 class="h4 mb-1">Админ панел</h1>
-          <div class="text-secondary small">Управление на всички сервизни заявки.</div>
+          <div class="text-secondary small">
+            Управление на всички сервизни заявки.
+          </div>
         </div>
 
         <!-- Search input -->
@@ -26,6 +29,15 @@
         </div>
 
         <div class="card p-3 p-lg-4">
+
+          <!-- Loading spinner -->
+          <div id="loadingState" class="text-center py-4 d-none">
+            <div class="spinner-border text-dark" role="status"></div>
+            <div class="mt-2 small text-secondary">
+              Зареждане...
+            </div>
+          </div>
+
           <div class="table-responsive">
             <table id="tbl" class="table align-middle mb-0">
               <thead>
@@ -40,6 +52,7 @@
               <tbody></tbody>
             </table>
           </div>
+
         </div>
       </div>
     </main>
