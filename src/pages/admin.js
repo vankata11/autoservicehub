@@ -16,13 +16,30 @@ async function main() {
   if (!session) throw new Error('No admin session');
 
   async function load() {
+    const loading = document.querySelector('#loadingState');
+    const error = document.querySelector('#errorState');
+    const table = document.querySelector('#tbl');
+
     try {
+      loading?.classList.remove('d-none');
+      error?.classList.add('d-none');
+      table?.classList.add('d-none');
+
       const items = await adminListAllRequests();
+
       const tbody = document.querySelector('#tbl tbody');
       tbody.innerHTML = items.map(r => row(r)).join('');
       wireActions();
+
     } catch (err) {
       toast(err?.message ?? 'Грешка при зареждане', 'danger');
+
+      error?.classList.remove('d-none');
+      table?.classList.add('d-none');
+
+    } finally {
+      loading?.classList.add('d-none');
+      table?.classList.remove('d-none');
     }
   }
 
@@ -34,13 +51,21 @@ async function main() {
     return `
       <tr data-id="${r.id}">
         <td class="text-secondary small">${new Date(r.created_at).toLocaleString()}</td>
-        <td><a class="link-dark fw-semibold" href="/request.html?id=${r.id}">${escapeHtml(r.title)}</a></td>
-        <td class="text-secondary small">${escapeHtml(r.profiles?.full_name ?? '')}</td>
+        <td>
+          <a class="link-dark fw-semibold" href="/request.html?id=${r.id}">
+            ${escapeHtml(r.title)}
+          </a>
+        </td>
+        <td class="text-secondary small">
+          ${escapeHtml(r.profiles?.full_name ?? '')}
+        </td>
         <td style="min-width: 180px;">
           <select class="form-select form-select-sm status">${opts}</select>
         </td>
         <td class="text-end">
-          <button class="btn btn-outline-danger btn-sm del">Изтрий</button>
+          <button class="btn btn-outline-danger btn-sm del">
+            Изтрий
+          </button>
         </td>
       </tr>
     `;
@@ -51,7 +76,7 @@ async function main() {
       const id = tr.getAttribute('data-id');
 
       // Status change
-      tr.querySelector('select.status')?.addEventListener('change', async (e) => {
+      tr.querySelector('select.status')?.addEventListener('change', async e => {
         const status = e.target.value;
         try {
           await adminUpdateStatus(id, status);
@@ -62,7 +87,7 @@ async function main() {
       });
 
       // Delete with loading state
-      tr.querySelector('button.del')?.addEventListener('click', async (e) => {
+      tr.querySelector('button.del')?.addEventListener('click', async e => {
         if (!confirm('Сигурен ли си, че искаш да изтриеш заявката?')) return;
 
         const btn = e.currentTarget;
@@ -83,6 +108,15 @@ async function main() {
       });
     });
   }
+
+  // Search filter
+  document.querySelector('#searchInput')?.addEventListener('input', e => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('#tbl tbody tr').forEach(tr => {
+      tr.style.display =
+        tr.textContent.toLowerCase().includes(term) ? '' : 'none';
+    });
+  });
 
   function escapeHtml(str) {
     return String(str ?? '')
