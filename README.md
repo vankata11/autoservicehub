@@ -2,6 +2,19 @@
 
 Multi-page JS app for creating and tracking car service requests with file uploads.
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge)](https://dashing-cannoli-44cb1a.netlify.app)
+
+## Screenshots
+
+### Landing Page
+(Add screenshot here later)
+
+### Dashboard
+(Add screenshot here later)
+
+### Admin Panel
+(Add screenshot here later)
+
 ## Tech
 - Vite + vanilla JS (no React/Vue, no TypeScript)
 - Bootstrap 5 (CDN)
