@@ -1,14 +1,16 @@
 /* Tiny custom styling on top of Bootstrap */
-body { background: #f8f9fa; }
+body {
+  background: #f8f9fa;
+}
 
 .navbar-brand {
   font-weight: 700;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
 }
 
 .card {
   border: 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   border-radius: 16px;
 }
 
@@ -23,7 +25,7 @@ body { background: #f8f9fa; }
 }
 
 .container-narrow {
-  max-width: 980px;
+  max-width: 1000px;
 }
 
 /* Button hover polish */
@@ -34,4 +36,114 @@ body { background: #f8f9fa; }
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+/* Tables */
+.table thead th {
+  font-weight: 600;
+  border-bottom-width: 1px;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Request details page */
+#desc {
+  word-break: break-word;
+  white-space: normal;
+}
+
+#files .btn {
+  white-space: nowrap;
+}
+
+#files .list-group-item:last-child {
+  border-bottom: 0 !important;
+}
+
+/* AI section */
+#aiSuggestionBox {
+  background: #fff;
+  border-radius: 14px;
+}
+
+#aiSummaryCard {
+  border-left: 4px solid rgba(13, 110, 253, 0.25);
+}
+
+#aiSummaryContent {
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+/* Stats cards */
+#statTotal,
+#statNew,
+#statInProgress,
+#statDone {
+  line-height: 1.1;
+}
+
+/* Empty / loading states */
+#emptyState,
+#filesEmptyState,
+#loadingState {
+  border-radius: 14px;
+}
+
+/* Forms */
+textarea.form-control {
+  resize: vertical;
+}
+
+/* Small polish for muted content blocks */
+.bg-light.rounded-3,
+.border.rounded-3,
+.border.rounded-3.p-3 {
+  border-radius: 14px !important;
+}
+
+/* Links inside cards */
+.card a.link-dark {
+  text-decoration: none;
+}
+
+.card a.link-dark:hover {
+  text-decoration: underline;
+}
+
+/* Responsive polish */
+@media (max-width: 768px) {
+  .card {
+    border-radius: 14px;
+  }
+
+  .container-narrow {
+    max-width: 100%;
+  }
+
+  .btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+.py-lg-6 {
+  padding-top: 4.5rem !important;
+  padding-bottom: 4.5rem !important;
+}
+
+.display-6 {
+  font-weight: 700;
+}
+
+.lead {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .py-lg-6 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
 }

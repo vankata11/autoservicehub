@@ -9,22 +9,49 @@
   </head>
 
   <body>
-    <main class="py-5">
+    <main class="py-5 py-lg-6">
       <div class="container container-narrow">
-        <div class="row g-4 align-items-center">
-          
+        <div class="row g-4 align-items-center mb-4">
           <div class="col-lg-7">
             <div class="card p-4 p-lg-5 shadow-sm">
+              <div class="d-inline-flex align-items-center gap-2 mb-3">
+                <span class="badge text-bg-dark px-3 py-2">AutoServiceHub</span>
+                <span class="text-secondary small">Smart automotive service workflow</span>
+              </div>
+
               <h1 class="display-6 mb-3">
                 Smart Car Service Management Platform
               </h1>
 
               <p class="lead text-secondary mb-4">
-                Create, track and manage car service requests with secure file uploads 
-                and role-based access control powered by Supabase.
+                Create, track and manage car service requests with secure file uploads,
+                role-based access control and AI-inspired service suggestions.
               </p>
 
-              <div id="cta" class="d-flex flex-wrap gap-2"></div>
+              <div id="cta" class="d-flex flex-wrap gap-2 mb-4"></div>
+
+              <div class="row g-3 text-center text-lg-start">
+                <div class="col-sm-6 col-lg-4">
+                  <div class="border rounded-3 p-3 h-100 bg-light">
+                    <div class="fw-semibold">Fast request creation</div>
+                    <div class="small text-secondary">Submit issues, vehicle details and files in one flow.</div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="border rounded-3 p-3 h-100 bg-light">
+                    <div class="fw-semibold">Admin control</div>
+                    <div class="small text-secondary">Manage all service requests and update their status.</div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="border rounded-3 p-3 h-100 bg-light">
+                    <div class="fw-semibold">Secure storage</div>
+                    <div class="small text-secondary">Private files with controlled access and signed URLs.</div>
+                  </div>
+                </div>
+              </div>
 
               <hr class="my-4">
 
@@ -40,21 +67,55 @@
           </div>
 
           <div class="col-lg-5">
-            <div class="card p-4 shadow-sm">
+            <div class="card p-4 shadow-sm mb-4">
               <h2 class="h5 mb-3">Demo Accounts</h2>
 
-              <ul class="mb-0 text-secondary">
-                <li><strong>User:</strong> demo@demo.com / demo123</li>
-                <li><strong>Admin:</strong> admin@demo.com / demo123</li>
-              </ul>
+              <div class="vstack gap-3">
+                <div class="border rounded-3 p-3 bg-light">
+                  <div class="fw-semibold mb-1">User</div>
+                  <div class="small text-secondary">demo@demo.com / demo123</div>
+                </div>
+
+                <div class="border rounded-3 p-3 bg-light">
+                  <div class="fw-semibold mb-1">Admin</div>
+                  <div class="small text-secondary">admin@demo.com / demo123</div>
+                </div>
+              </div>
 
               <div class="alert alert-warning mt-3 mb-0 small">
-                After assigning the admin role in the database (see README), 
-                the admin account will have access to the Admin dashboard.
+                After assigning the admin role in the database, the admin account
+                receives access to the management dashboard.
               </div>
             </div>
-          </div>
 
+            <div class="card p-4 shadow-sm">
+              <h2 class="h5 mb-3">Why this project stands out</h2>
+              <ul class="mb-0 text-secondary small ps-3">
+                <li>End-to-end full-stack workflow</li>
+                <li>Authentication and role separation</li>
+                <li>Secure uploads and private file access</li>
+                <li>AI-inspired request assistance</li>
+                <li>Production deployment with modular structure</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-4 p-lg-5 shadow-sm">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-8">
+              <h2 class="h4 mb-2">Built for modern automotive service workflows</h2>
+              <p class="text-secondary mb-0">
+                AutoServiceHub demonstrates how a multi-page JavaScript application can combine
+                Supabase authentication, database operations, storage security, admin features,
+                and AI-oriented enhancements into a practical real-world product.
+              </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+              <a href="/register.html" class="btn btn-dark me-2">Get Started</a>
+              <a href="/login.html" class="btn btn-outline-dark">Sign In</a>
+            </div>
+          </div>
         </div>
       </div>
     </main>
