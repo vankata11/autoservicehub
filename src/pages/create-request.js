@@ -4,6 +4,7 @@ import { requireAuthOrRedirect } from '../services/authService.js';
 import { createRequest, addRequestFile } from '../services/requestService.js';
 import { uploadRequestFile } from '../services/storageService.js';
 import { toast } from '../lib/ui.js';
+import { getAiServiceSuggestion } from '../lib/ai-helper.js';
 
 async function main() {
   await renderNavbar('create');
@@ -13,10 +14,81 @@ async function main() {
 
   const userId = session.user.id;
 
-  document.querySelector('#formCreate').addEventListener('submit', async (e) => {
+  const form = document.querySelector('#formCreate');
+  const titleInput = document.querySelector('#title');
+  const carInput = document.querySelector('#car');
+  const descriptionInput = document.querySelector('#description');
+  const fileInput = document.querySelector('#files');
+
+  const aiIssueInput = document.getElementById('aiIssueInput');
+  const aiSuggestBtn = document.getElementById('aiSuggestBtn');
+  const aiUseSuggestionBtn = document.getElementById('aiUseSuggestionBtn');
+  const aiSuggestionBox = document.getElementById('aiSuggestionBox');
+
+  const aiPossibleIssue = document.getElementById('aiPossibleIssue');
+  const aiRecommendedService = document.getElementById('aiRecommendedService');
+  const aiUrgency = document.getElementById('aiUrgency');
+  const aiAdvice = document.getElementById('aiAdvice');
+
+  let lastSuggestion = null;
+
+  function getUrgencyBadge(urgency) {
+    if (urgency === 'Висока') {
+      return '<span class="badge text-bg-danger">Висока</span>';
+    }
+    if (urgency === 'Средна') {
+      return '<span class="badge text-bg-warning">Средна</span>';
+    }
+    return '<span class="badge text-bg-success">Ниска</span>';
+  }
+
+  if (aiSuggestBtn) {
+    aiSuggestBtn.addEventListener('click', () => {
+      const input = aiIssueInput?.value ?? '';
+      const suggestion = getAiServiceSuggestion(input);
+
+      lastSuggestion = suggestion;
+
+      if (aiPossibleIssue) aiPossibleIssue.textContent = suggestion.possibleIssue;
+      if (aiRecommendedService) aiRecommendedService.textContent = suggestion.recommendedService;
+      if (aiUrgency) aiUrgency.innerHTML = getUrgencyBadge(suggestion.urgency);
+      if (aiAdvice) aiAdvice.textContent = suggestion.advice;
+
+      aiSuggestionBox?.classList.remove('d-none');
+      aiUseSuggestionBtn?.classList.remove('d-none');
+    });
+  }
+
+  if (aiUseSuggestionBtn) {
+    aiUseSuggestionBtn.addEventListener('click', () => {
+      if (!lastSuggestion) return;
+
+      if (titleInput && !titleInput.value.trim()) {
+        titleInput.value = lastSuggestion.recommendedService;
+      }
+
+      const aiText =
+        `AI препоръка:\n` +
+        `- Възможен проблем: ${lastSuggestion.possibleIssue}\n` +
+        `- Препоръчана услуга: ${lastSuggestion.recommendedService}\n` +
+        `- Спешност: ${lastSuggestion.urgency}\n` +
+        `- Съвет: ${lastSuggestion.advice}`;
+
+      if (descriptionInput) {
+        if (!descriptionInput.value.trim()) {
+          descriptionInput.value = aiText;
+        } else if (!descriptionInput.value.includes('AI препоръка:')) {
+          descriptionInput.value += `\n\n${aiText}`;
+        }
+      }
+
+      toast('AI препоръката беше добавена към заявката.', 'success');
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // UX: disable submit button to prevent double submits
     const submitBtn = document.querySelector('#formCreate button[type="submit"]');
     const originalBtnText = submitBtn?.textContent ?? 'Създай';
 
@@ -25,27 +97,34 @@ async function main() {
       submitBtn.textContent = 'Създаване...';
     }
 
-    const title = document.querySelector('#title').value.trim();
-    const car = document.querySelector('#car').value.trim();
-    const description = document.querySelector('#description').value.trim();
-    const fileInput = document.querySelector('#files');
+    const title = titleInput.value.trim();
+    const car = carInput.value.trim();
+    const description = descriptionInput.value.trim();
 
-    // Basic client-side validation
     if (!title || title.length < 5) {
       toast('Заглавието трябва да е поне 5 символа.', 'warning');
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
       return;
     }
 
     if (!car) {
       toast('Моля въведете модел на автомобила.', 'warning');
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
       return;
     }
 
     if (!description || description.length < 10) {
       toast('Описанието трябва да е поне 10 символа.', 'warning');
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
       return;
     }
 
@@ -59,6 +138,7 @@ async function main() {
       });
 
       const files = [...(fileInput.files ?? [])].slice(0, 5);
+
       for (const f of files) {
         const uploaded = await uploadRequestFile(userId, req.id, f);
         await addRequestFile({
