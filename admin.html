@@ -18,19 +18,66 @@
           </div>
         </div>
 
-        <!-- Search input -->
-        <div class="mb-3">
-          <input
-            type="text"
-            id="searchInput"
-            class="form-control"
-            placeholder="Търси по заглавие или клиент..."
-          >
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <div class="text-secondary small">Общо заявки</div>
+                <div id="statTotal" class="fs-3 fw-bold">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <div class="text-secondary small">Нови</div>
+                <div id="statNew" class="fs-3 fw-bold">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <div class="text-secondary small">В процес</div>
+                <div id="statInProgress" class="fs-3 fw-bold">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <div class="text-secondary small">Завършени</div>
+                <div id="statDone" class="fs-3 fw-bold">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-8">
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control"
+              placeholder="Търси по заглавие, клиент или автомобил..."
+            >
+          </div>
+
+          <div class="col-md-4">
+            <select id="statusFilter" class="form-select">
+              <option value="all">Всички статуси</option>
+              <option value="new">Нови</option>
+              <option value="in_progress">В процес</option>
+              <option value="done">Завършени</option>
+            </select>
+          </div>
         </div>
 
         <div class="card p-3 p-lg-4">
 
-          <!-- Loading spinner -->
           <div id="loadingState" class="text-center py-4 d-none">
             <div class="spinner-border text-dark" role="status"></div>
             <div class="mt-2 small text-secondary">
@@ -38,13 +85,16 @@
             </div>
           </div>
 
-          <!-- Error state -->
           <div id="errorState" class="alert alert-danger d-none text-center">
             Възникна грешка при зареждане на заявките.
             <br>
             <button class="btn btn-outline-dark btn-sm mt-2" onclick="location.reload()">
               Презареди
             </button>
+          </div>
+
+          <div id="emptyState" class="text-center py-5 text-secondary d-none">
+            Няма заявки по зададените критерии.
           </div>
 
           <div class="table-responsive">
