@@ -25,7 +25,6 @@ async function main() {
     try {
       const req = await getRequestById(id);
 
-      // Extra client-side guard; RLS is the real protection
       if (!admin && req.owner_id !== userId) {
         toast('Нямаш достъп до тази заявка.', 'danger');
         window.location.href = '/dashboard.html';
@@ -34,29 +33,37 @@ async function main() {
 
       setText(document.querySelector('#title'), req.title);
       setText(document.querySelector('#car'), req.car_model);
-      setText(document.querySelector('#desc'), req.description);
+      document.querySelector('#desc').innerHTML = nl2br(req.description ?? '');
       document.querySelector('#status').innerHTML = renderStatus(req.status);
       setText(document.querySelector('#created'), new Date(req.created_at).toLocaleString());
 
+      renderAiSummary(req.description ?? '');
+
       const files = await listRequestFiles(id);
       const ul = document.querySelector('#files');
+      const filesEmptyState = document.querySelector('#filesEmptyState');
 
       if (!files.length) {
-        ul.innerHTML = `<li class="list-group-item text-secondary">Няма качени файлове.</li>`;
+        ul.innerHTML = '';
+        filesEmptyState?.classList.remove('d-none');
         return;
       }
 
+      filesEmptyState?.classList.add('d-none');
       ul.innerHTML = '';
+
       for (const f of files) {
         const url = await createSignedUrl(f.file_path, 60 * 10);
         const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.className = 'list-group-item px-0 py-3 border-0 border-bottom';
         li.innerHTML = `
-          <div class="me-2">
-            <div class="fw-semibold">${escapeHtml(f.original_name)}</div>
-            <div class="text-secondary small">${new Date(f.created_at).toLocaleString()}</div>
+          <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+            <div class="me-2">
+              <div class="fw-semibold text-break">${escapeHtml(f.original_name)}</div>
+              <div class="text-secondary small">${new Date(f.created_at).toLocaleString()}</div>
+            </div>
+            <a class="btn btn-outline-dark btn-sm" href="${url}" target="_blank" rel="noopener">Изтегли</a>
           </div>
-          <a class="btn btn-outline-dark btn-sm" href="${url}" target="_blank" rel="noopener">Изтегли</a>
         `;
         ul.appendChild(li);
       }
@@ -65,15 +72,39 @@ async function main() {
     }
   }
 
-  function renderStatus(s) {
+  function renderStatus(status) {
     const map = {
-      new: 'bg-primary',
-      in_progress: 'bg-warning text-dark',
-      done: 'bg-success',
-      rejected: 'bg-danger'
+      new: '<span class="badge text-bg-primary">Нова</span>',
+      in_progress: '<span class="badge text-bg-warning">В процес</span>',
+      done: '<span class="badge text-bg-success">Завършена</span>',
+      rejected: '<span class="badge text-bg-danger">Отказана</span>'
     };
-    const cls = map[s] ?? 'bg-secondary';
-    return `<span class="badge ${cls}">${s}</span>`;
+
+    return map[status] ?? `<span class="badge text-bg-secondary">${escapeHtml(status)}</span>`;
+  }
+
+  function renderAiSummary(description) {
+    const aiCard = document.querySelector('#aiSummaryCard');
+    const aiContent = document.querySelector('#aiSummaryContent');
+
+    if (!description || !description.includes('AI препоръка:')) {
+      aiCard?.classList.add('d-none');
+      return;
+    }
+
+    const aiText = description.split('AI препоръка:')[1]?.trim();
+
+    if (!aiText) {
+      aiCard?.classList.add('d-none');
+      return;
+    }
+
+    aiContent.innerHTML = nl2br(aiText);
+    aiCard?.classList.remove('d-none');
+  }
+
+  function nl2br(str) {
+    return escapeHtml(str).replaceAll('\n', '<br>');
   }
 
   function escapeHtml(str) {
